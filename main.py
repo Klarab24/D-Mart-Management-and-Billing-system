@@ -1,4 +1,4 @@
-import logo, os
+import logo, os, mysql.connector
 #create a class to setup the billing system
 class bill:
     def __init__(self, Parent_Company,Company_Name, CIN, GSTIN, FSSAI, Location, Address, Phone_No, Email):
@@ -14,6 +14,21 @@ class bill:
         self.Email = Email
         self.Date = os.popen("date").read()
         self.Time = os.popen("date +%T").read()
+
+    def database_setup(self):
+        mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="1234",
+        database="store",
+        auth_plugin='mysql_native_password'
+        )
+        mycursor = mydb.cursor()
+        mycursor.execute("""CREATE TABLE IF NOT EXISTS bill 
+        (Bill_no varchar(15) primary key, 
+        Bill_dt date not null, 
+        Cashier varchar(15) not null, 
+        Bill_val integer(6) not null""")
 
     def print_bill(self):
         print("-"*50)
